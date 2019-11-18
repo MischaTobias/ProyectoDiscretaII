@@ -71,6 +71,10 @@ namespace ProyectoDiscretaII
                     break;
             }
 
+            string[] arrayGrafo1 = StringArraySort(grafoCompleto1, grafoCompleto1.Length);
+            string[] arrayGrafo2 = StringArraySort(grafoCompleto2, grafoCompleto2.Length);
+            //https://www.geeksforgeeks.org/sort-array-strings-according-string-lengths/
+
             if (lista1.Count != lista2.Count)
             {
                 Console.WriteLine("No son isomorfos, no tienen la misma cantidad de aristas");
@@ -200,6 +204,32 @@ namespace ProyectoDiscretaII
             {
                 return 3;
             }
+        }
+
+        static string[] StringArraySort(string[] soriginal, int n)
+        {
+            string[] s = new string[n];
+            for (int i = 0; i < n; i++)
+            {
+                s[i] = soriginal[i];
+            }
+            for (int i = 1; i < n; i++)
+            {
+                if (s[i] != null)
+                {
+                    string temp = s[i];
+
+                    // Insert s[j] at its correct position 
+                    int j = i - 1;
+                    while (j >= 0 && temp.Length < s[j].Length)
+                    {
+                        s[j + 1] = s[j];
+                        j--;
+                    }
+                    s[j + 1] = temp;
+                }
+            }
+            return s;
         }
     }
 }
