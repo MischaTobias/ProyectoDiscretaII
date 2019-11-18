@@ -89,6 +89,19 @@ namespace ProyectoDiscretaII
                     Console.ReadKey();
                     goto Inicio;
             }
+
+            List<string> listaGrafo1 = new List<string>();
+            for (int i = 1; i < arregloGrafo1.Length; i++)
+            {
+                if (!ValorExistente(arregloGrafo1[i][0], listaGrafo1))
+                {
+                    listaGrafo1.Add(arregloGrafo1[i][0].ToString());
+                }
+                else if (!ValorExistente(arregloGrafo1[i][2], listaGrafo1))
+                {
+                    listaGrafo1.Add(arregloGrafo1[i][2].ToString());
+                }
+            }
             Console.ReadKey();
         }
 
@@ -112,6 +125,18 @@ namespace ProyectoDiscretaII
             {
                 return 3;
             }
+        }
+
+        static bool ValorExistente(char value, List<string> listaGrafo)
+        {
+            foreach (string values in listaGrafo)
+            {
+                if (values == value.ToString())
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
