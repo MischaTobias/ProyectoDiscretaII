@@ -8,18 +8,19 @@ using System.IO;
 namespace ProyectoDiscretaII
 {
     class NodoVertice
-    {
+    { 
         //nombre
-        public int Nombre;
-        public string Caminos;
+        public string vertex;
+        public List<string> conexiones;
+        public NodoVertice()
+        {
+            conexiones = new List<string>();
+        }
     }
     class Program
     {
-
         static void Main(string[] args)
         {
-            List<int> listaDeGrados1 = new List<int>();
-            List<int> listaDeGrados2 = new List<int>();
             Console.Clear();
             Console.WriteLine("Inserte el archivo que contiene el primer grafo");
             string dir_primergrafo = Console.ReadLine();
@@ -33,12 +34,7 @@ namespace ProyectoDiscretaII
                 Console.WriteLine("Ingrese un archivo válido");
                 Console.ReadKey();
                 Environment.Exit(0);
-            }
-
-            var grafoCompleto1 = new string[lista1.Count / 2];
-            grafoCompleto1 = ObtenerGrafoCompleto(grafoCompleto1, lista1);
-            listaDeGrados1 = ObtenerListaGrados(grafoCompleto1, listaDeGrados1);
-            
+            }            
 
             Console.WriteLine("Inserte el archivo que contiene el segundo grafo");
             string dir_segundografo = Console.ReadLine();
@@ -53,9 +49,6 @@ namespace ProyectoDiscretaII
                 Console.ReadKey();
                 Environment.Exit(0);
             }
-            var grafoCompleto2 = new string[lista2.Count / 2];
-            grafoCompleto2 = ObtenerGrafoCompleto(grafoCompleto2, lista2);
-            listaDeGrados2 = ObtenerListaGrados(grafoCompleto2, listaDeGrados2);
 
             switch (MismoNumVert(dir_primergrafo, dir_segundografo))
             {
@@ -71,54 +64,73 @@ namespace ProyectoDiscretaII
                     break;
             }
 
-            string[] arrayGrafo1 = StringArraySort(grafoCompleto1, grafoCompleto1.Length);
-            string[] arrayGrafo2 = StringArraySort(grafoCompleto2, grafoCompleto2.Length);
-            //https://www.geeksforgeeks.org/sort-array-strings-according-string-lengths/
-
-            if (lista1.Count != lista2.Count)
+            if (!MismasAristas(lista1, lista2))
             {
                 Console.WriteLine("No son isomorfos, no tienen la misma cantidad de aristas");
                 Console.ReadKey();
                 Environment.Exit(0);
             }
-            //grado = GrafoCompleto1[5].Split(',').Length - 1;
-            for (int i = 0; i < listaDeGrados1.Count; i++)
+
+            if (!MismosGrados(lista1, lista2))
             {
-                // AQUI COMPARAMOS UNO VS UNO
-                if (listaDeGrados1[i] != listaDeGrados2[i])
-                {
-                    Console.Clear();
-                    Console.WriteLine("No son isomorfos, no tienen la misma cantidad de vértices con el mismo grado");
-                    Console.ReadKey();
-                    Environment.Exit(0);
-                    // son diferentes
-                    //no son isomorfos UwU
-                }
+                Console.Clear();
+                Console.WriteLine("No son isomorfos, no tienen la misma cantidad de vértices con el mismo grado");
+                Console.ReadKey();
+                Environment.Exit(0);
             }
 
-            //funcion iso
-            foreach (var item1 in listaDeGrados1)
-            {
-                //COMPARAMOS UNO VS TODOS LOS DEMAS DE EL OTRO GRAFO
-                foreach (var item2 in listaDeGrados2)
-                {
-                    if (item1 == item2)
-                    {
-                        //item1 = item2
-                        //item1 = item2
-                    }
-                    
-                }
-            }
-            //nodos Grafos
-            //[0]->1,2.split() -> int REPRESENTA EL GRADO DE TU VERTICE 
-            //[1]->0,2
-            //[2]->3,1
-            //[3]->0,2
-
-            //switch (MismoNumVert(arregloGrafo1, arregloGrafo)
         }
 
+        static bool MismosGrados(List<NodoVertice> lista1, List<NodoVertice> lista2)
+        {
+            List<int> grados1 = new List<int>();
+            List<int> grados2 = new List<int>();
+            for (int i = 0; i < lista1.Count; i++)
+            {
+                grados1.Add(lista1[i].conexiones.Count);
+            }
+
+            for (int i = 0; i < lista2.Count; i++)
+            {
+                grados2.Add(lista2[i].conexiones.Count);
+            }
+
+            grados1.Sort();
+            grados2.Sort();
+
+            for (int i = 0; i < grados1.Count; i++)
+            {
+                if (grados1[i]!=grados2[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        static bool MismasAristas(List<NodoVertice> lista1, List<NodoVertice> lista2)
+        {
+            int aristas1 = 0;
+            int aristas2 = 0;
+
+            foreach (var item in lista1)
+            {
+                aristas1 += item.conexiones.Count;
+            }
+
+            foreach (var item in lista2)
+            {
+                aristas2 += item.conexiones.Count;
+            }
+
+            if (aristas1 == aristas2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         static List<NodoVertice> Comprobacion(string dir_grafo)
         {
             var lector = new StreamReader(dir_grafo);
@@ -130,14 +142,21 @@ namespace ProyectoDiscretaII
                 {
                     if (!(linea.Split(',').Length == 1))
                     {
-                        var actual = new NodoVertice();
-                        actual.Nombre = int.Parse(linea.Split(',')[0]);
-                        actual.Caminos = linea.Split(',')[1];
-                        var inverso = new NodoVertice();
-                        inverso.Nombre = int.Parse(linea.Split(',')[1]);
-                        inverso.Caminos = linea.Split(',')[0];
-                        lista.Add(actual);
-                        lista.Add(inverso);
+                        if (ExisteVertex(lista, linea.Split(',')[0]))
+                        {
+                            AgregarConexion(lista, linea.Split(',')[0], linea.Split(',')[1]);
+                        }
+                        else if (ExisteVertex(lista, linea.Split(',')[1]))
+                        {
+                            AgregarConexion(lista, linea.Split(',')[1], linea.Split(',')[0]);
+                        }
+                        else
+                        {
+                            var actual = new NodoVertice();
+                            actual.vertex = linea.Split(',')[0];
+                            actual.conexiones.Add(linea.Split(',')[1]);
+                            lista.Add(actual);
+                        }
                     }
                     linea = lector.ReadLine();
                 }
@@ -151,36 +170,27 @@ namespace ProyectoDiscretaII
             }
             return lista;
         }
-
-        static string[] ObtenerGrafoCompleto(string[] grafo, List<NodoVertice> lista)
+        static void AgregarConexion(List<NodoVertice> lista, string vertex, string conexion)
         {
-            foreach (var VerticeActual in lista)
+            for (int i = 0; i < lista.Count; i++)
             {
-                //tomamos el nombre 
-                //primer dato.
-                //el camino (hacia donde va) + ,
-                grafo[VerticeActual.Nombre] += VerticeActual.Caminos + ",";
-            }
-            return grafo;
-        }
-
-        static List<int> ObtenerListaGrados(string[] grafoCompleto, List<int> listaDeGrados)
-        {
-            foreach (var item in grafoCompleto)
-            {
-                if (item != null)
+                if (lista[i].vertex == vertex)
                 {
-                    listaDeGrados.Add(item.Split(',').Length - 1);
-                }
-                else
-                {
-                    break;
+                    lista[i].conexiones.Add(conexion);
                 }
             }
-            listaDeGrados.Sort();
-            return listaDeGrados;
         }
-
+        static bool ExisteVertex(List<NodoVertice> listavertex, string vertex)
+        {
+            for (int i = 0; i < listavertex.Count; i++)
+            {
+                if (listavertex[i].vertex == vertex)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         //Función que comprueba si 2 grafos tenen la misma cantidad de vértices con base en el primer dato en los array
         static int MismoNumVert(string dir_grafo1, string dir_grafo2)
         { 
@@ -204,32 +214,6 @@ namespace ProyectoDiscretaII
             {
                 return 3;
             }
-        }
-
-        static string[] StringArraySort(string[] soriginal, int n)
-        {
-            string[] s = new string[n];
-            for (int i = 0; i < n; i++)
-            {
-                s[i] = soriginal[i];
-            }
-            for (int i = 1; i < n; i++)
-            {
-                if (s[i] != null)
-                {
-                    string temp = s[i];
-
-                    // Insert s[j] at its correct position 
-                    int j = i - 1;
-                    while (j >= 0 && temp.Length < s[j].Length)
-                    {
-                        s[j + 1] = s[j];
-                        j--;
-                    }
-                    s[j + 1] = temp;
-                }
-            }
-            return s;
         }
     }
 }
