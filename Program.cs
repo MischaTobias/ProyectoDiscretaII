@@ -71,41 +71,41 @@ namespace ProyectoDiscretaII
                 Environment.Exit(0);
             }
 
-            if (!MismosGrados(lista1, lista2))
+            List<int> grados1 = new List<int>();
+            List<int> grados2 = new List<int>();
+
+            grados1 = GenerarGrados(lista1, grados1);
+            grados2 = GenerarGrados(lista2, grados2);
+
+            if (MismosGrados(grados1, grados2))
             {
                 Console.Clear();
                 Console.WriteLine("No son isomorfos, no tienen la misma cantidad de vértices con el mismo grado");
                 Console.ReadKey();
                 Environment.Exit(0);
             }
-
         }
 
-        static bool MismosGrados(List<NodoVertice> lista1, List<NodoVertice> lista2)
+        static bool MismosGrados(List<int> grados1, List<int> grados2)
         {
-            List<int> grados1 = new List<int>();
-            List<int> grados2 = new List<int>();
-            for (int i = 0; i < lista1.Count; i++)
-            {
-                grados1.Add(lista1[i].conexiones.Count);
-            }
-
-            for (int i = 0; i < lista2.Count; i++)
-            {
-                grados2.Add(lista2[i].conexiones.Count);
-            }
-
-            grados1.Sort();
-            grados2.Sort();
-
             for (int i = 0; i < grados1.Count; i++)
             {
-                if (grados1[i]!=grados2[i])
+                if (grados1[i] != grados2[i])
                 {
                     return false;
                 }
             }
             return true;
+        }
+        static List<int> GenerarGrados(List<NodoVertice> lista, List<int> grados)
+        {
+            for (int i = 0; i < lista.Count; i++)
+            {
+                grados.Add(lista[i].conexiones.Count);
+            }
+
+            grados.Sort();
+            return grados;
         }
         static bool MismasAristas(List<NodoVertice> lista1, List<NodoVertice> lista2)
         {
