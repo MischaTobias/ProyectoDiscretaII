@@ -145,10 +145,32 @@ namespace ProyectoDiscretaII
                         if (ExisteVertex(lista, linea.Split(',')[0]))
                         {
                             AgregarConexion(lista, linea.Split(',')[0], linea.Split(',')[1]);
+                            if (ExisteVertex(lista, linea.Split(',')[1]))
+                            {
+                                AgregarConexion(lista, linea.Split(',')[1], linea.Split(',')[0]);
+                            }
+                            else
+                            {
+                                var actual2 = new NodoVertice();
+                                actual2.vertex = linea.Split(',')[1];
+                                actual2.conexiones.Add(linea.Split(',')[0]);
+                                lista.Add(actual2);
+                            }
                         }
                         else if (ExisteVertex(lista, linea.Split(',')[1]))
                         {
                             AgregarConexion(lista, linea.Split(',')[1], linea.Split(',')[0]);
+                            if (ExisteVertex(lista, linea.Split(',')[0]))
+                            {
+                                AgregarConexion(lista, linea.Split(',')[0], linea.Split(',')[1]);
+                            }
+                            else
+                            {
+                                var actual2 = new NodoVertice();
+                                actual2.vertex = linea.Split(',')[0];
+                                actual2.conexiones.Add(linea.Split(',')[1]);
+                                lista.Add(actual2);
+                            }
                         }
                         else
                         {
@@ -156,6 +178,17 @@ namespace ProyectoDiscretaII
                             actual.vertex = linea.Split(',')[0];
                             actual.conexiones.Add(linea.Split(',')[1]);
                             lista.Add(actual);
+                            if (ExisteVertex(lista, linea.Split(',')[1]))
+                            {
+                                AgregarConexion(lista, linea.Split(',')[1], linea.Split(',')[0]);
+                            }
+                            else
+                            {
+                                var actual2 = new NodoVertice();
+                                actual2.vertex = linea.Split(',')[1];
+                                actual2.conexiones.Add(linea.Split(',')[0]);
+                                lista.Add(actual2);
+                            }
                         }
                     }
                     linea = lector.ReadLine();
@@ -176,7 +209,10 @@ namespace ProyectoDiscretaII
             {
                 if (lista[i].vertex == vertex)
                 {
-                    lista[i].conexiones.Add(conexion);
+                    if (lista[i].conexiones.BinarySearch(conexion) < 0)
+                    {
+                        lista[i].conexiones.Add(conexion);
+                    }
                 }
             }
         }
