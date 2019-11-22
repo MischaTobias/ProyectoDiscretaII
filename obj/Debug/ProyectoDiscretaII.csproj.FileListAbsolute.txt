@@ -4,3 +4,9 @@ C:\Users\misch\source\repos\ProyectoDiscretaII\bin\Debug\ProyectoDiscretaII.pdb
 C:\Users\misch\source\repos\ProyectoDiscretaII\obj\Debug\ProyectoDiscretaII.csprojAssemblyReference.cache
 C:\Users\misch\source\repos\ProyectoDiscretaII\obj\Debug\ProyectoDiscretaII.exe
 C:\Users\misch\source\repos\ProyectoDiscretaII\obj\Debug\ProyectoDiscretaII.pdb
+D:\Mansilla\URL\Mate Discreta II\Proyecto\ProyectoDiscretaII\bin\Debug\ProyectoDiscretaII.exe.config
+D:\Mansilla\URL\Mate Discreta II\Proyecto\ProyectoDiscretaII\bin\Debug\ProyectoDiscretaII.exe
+D:\Mansilla\URL\Mate Discreta II\Proyecto\ProyectoDiscretaII\bin\Debug\ProyectoDiscretaII.pdb
+D:\Mansilla\URL\Mate Discreta II\Proyecto\ProyectoDiscretaII\obj\Debug\ProyectoDiscretaII.csprojAssemblyReference.cache
+D:\Mansilla\URL\Mate Discreta II\Proyecto\ProyectoDiscretaII\obj\Debug\ProyectoDiscretaII.exe
+D:\Mansilla\URL\Mate Discreta II\Proyecto\ProyectoDiscretaII\obj\Debug\ProyectoDiscretaII.pdb

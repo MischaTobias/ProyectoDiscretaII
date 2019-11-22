@@ -16,6 +16,8 @@ namespace ProyectoDiscretaII
         {
             conexiones = new List<string>();
         }
+    
+       
     }
     class Program
     {
@@ -24,6 +26,9 @@ namespace ProyectoDiscretaII
             Console.Clear();
             Console.WriteLine("Inserte el archivo que contiene el primer grafo");
             string dir_primergrafo = Console.ReadLine();
+            StreamReader streamReader = new StreamReader(dir_primergrafo);
+            int cantVertex1 = Convert.ToInt16(streamReader.ReadLine());
+            streamReader.Close();
             var lista1 = new List<NodoVertice>();
             try
             {
@@ -38,6 +43,9 @@ namespace ProyectoDiscretaII
 
             Console.WriteLine("Inserte el archivo que contiene el segundo grafo");
             string dir_segundografo = Console.ReadLine();
+            streamReader = new StreamReader(dir_segundografo);
+            int cantVertex2 = Convert.ToInt16(streamReader.ReadLine());
+            streamReader.Close();
             var lista2 = new List<NodoVertice>();
             try
             {
@@ -50,19 +58,27 @@ namespace ProyectoDiscretaII
                 Environment.Exit(0);
             }
 
-            switch (MismoNumVert(dir_primergrafo, dir_segundografo))
+            try
             {
-                case 2:
-                    Console.WriteLine("No son isomorfos, no tienen la misma cantidad de vértices");
+                if (cantVertex1 == cantVertex2)
+                {
+                    string[,] matriz1 = new string[cantVertex1 + 1, cantVertex1 + 1];
+                    string[,] matriz2 = new string[cantVertex2 + 1, cantVertex2 + 1];
+                }
+                else
+                {
+                    Console.WriteLine("Los grafos no son isomorfos, no tienen la misma cantidad de vértices");
                     Console.ReadKey();
                     Environment.Exit(0);
-                    break;
-                case 3:
-                    Console.WriteLine("Los archivos ingresados no tienen el formato correcto");
-                    Console.ReadKey();
-                    Environment.Exit(0);
-                    break;
+                }
             }
+            catch
+            {
+                Console.WriteLine("El archivo ingresado no tiene el formato correcto");
+                Console.ReadKey();
+                Environment.Exit(0);
+            }
+
 
             if (!MismasAristas(lista1, lista2))
             {
@@ -228,28 +244,6 @@ namespace ProyectoDiscretaII
             return false;
         }
         //Función que comprueba si 2 grafos tenen la misma cantidad de vértices con base en el primer dato en los array
-        static int MismoNumVert(string dir_grafo1, string dir_grafo2)
-        { 
-            try
-            {
-                StreamReader streamReader = new StreamReader(dir_grafo1);
-                int cantVertex1 = Convert.ToInt16(streamReader.ReadLine());
-                streamReader.Close();
-                streamReader = new StreamReader(dir_grafo2);
-                int cantVertex2 = Convert.ToInt16(streamReader.ReadLine());
-                if (cantVertex1 == cantVertex2)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 2;
-                }
-            }
-            catch
-            {
-                return 3;
-            }
-        }
+
     }
 }
